@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "638666852369",
+    "project_id": "medlink-2f073",
+    "storage_bucket": "medlink-2f073.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638666852369:android:2ca35ac187e2eebd8d89b0",
+        "android_client_info": {
+          "package_name": "com.example.medlink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638666852369-qn1girma27a286ohessfuqntud7jc6r9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3eaXMVQ2P9tH4f662js5dYtH6e8fSDoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638666852369-qn1girma27a286ohessfuqntud7jc6r9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
