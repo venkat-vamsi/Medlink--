@@ -32,6 +32,8 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.1  
+  webview_flutter: ^2.3.0
+  image_picker: ^0.8.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -74,6 +76,7 @@ flutter:
     - assets/images/profile2.png
     - assets/images/basic_details.jpeg
     - assets/images/scans.jpeg
+    - assets/images/Untitled.png
     - assets/images/contacts.jpeg
     - assets/images/insurance.jpeg
     - assets/images/active_medication.jpeg
