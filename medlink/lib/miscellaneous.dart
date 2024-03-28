@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medlink/homepage.dart';
+import 'package:medlink/news/homenews.dart';
 import 'package:medlink/settings.dart';
 //import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -13,7 +14,7 @@ class miscellaneous extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawerWidget(),
+      //drawer: NavigationDrawerWidget(),
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.black,
@@ -21,7 +22,7 @@ class miscellaneous extends StatelessWidget {
         title: GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HOME()));
+                context, MaterialPageRoute(builder: (context) => HomeN()));
           },
           child: Text('MEDLINK+'),
         ),
@@ -31,17 +32,7 @@ class miscellaneous extends StatelessWidget {
           fontSize: 25,
           fontWeight: FontWeight.w400,
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => settings()));
-            },
-          ),
-        ],
         backgroundColor: Colors.transparent,
-        //backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: WebView(

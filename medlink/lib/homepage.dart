@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:medlink/active_medication.dart';
 import 'package:medlink/basic_details.dart';
@@ -5,32 +6,56 @@ import 'package:medlink/contacts.dart';
 import 'package:medlink/insurances.dart';
 import 'package:medlink/menu.dart';
 import 'package:medlink/miscellaneous.dart';
+import 'package:medlink/news/homenews.dart';
 import 'package:medlink/prescriptions.dart';
 import 'package:medlink/prev_med_conditions.dart';
 import 'package:medlink/scans.dart';
 import 'package:medlink/settings.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HOME extends StatefulWidget {
-  const HOME({super.key});
+  const HOME({super.key, required String userId});
 
   @override
   State<HOME> createState() => _HOMEState();
 }
 
 class _HOMEState extends State<HOME> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  User? _user;
+
+  String? _imagePath;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        setState(() {
+          _imagePath = pickedFile.path;
+        });
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavigationDrawerWidget(),
+        //drawer: NavigationDrawerWidget(),
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Colors.black,
           ),
-          //title: Text('MEDLINK+'),
           title: GestureDetector(
             onTap: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HOME()));
+                  context, MaterialPageRoute(builder: (context) => HomeN()));
             },
             child: Text('MEDLINK+'),
           ),
@@ -50,11 +75,8 @@ class _HOMEState extends State<HOME> {
             ),
           ],
           backgroundColor: Colors.transparent,
-          //backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        //extendBodyBehindAppBar: true,
-
         body: SingleChildScrollView(
           child: Container(
             decoration: BoxDecoration(
@@ -65,25 +87,21 @@ class _HOMEState extends State<HOME> {
             ),
             child: Column(
               children: <Widget>[
-                // Add your content here
-                // ...
                 Container(
                   padding: EdgeInsets.all(16),
                   alignment: Alignment(0, 0.5),
                   child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => settings()));
-                      },
+                      onPressed: _pickImage,
                       child: Container(
                         height: 175,
                         width: 175,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                                image: AssetImage('assets/images/profile2.png'),
+                                image: _imagePath != null
+                                    ? FileImage(File(_imagePath!))
+                                    : AssetImage('assets/images/profile2.png')
+                                        as ImageProvider,
                                 fit: BoxFit.cover)),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -121,36 +139,6 @@ class _HOMEState extends State<HOME> {
                         elevation: 10,
                       )),
                 ),
-
-                //ACTIVE MEDICATION
-
-                Container(
-                  padding: EdgeInsets.all(16),
-                  alignment: Alignment(0, 1),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyAppHomePage()));
-                      },
-                      child: Container(
-                        height: 175,
-                        width: 350,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/active_medication.jpeg'),
-                                fit: BoxFit.cover)),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        shape: BeveledRectangleBorder(),
-                        backgroundColor: Colors.transparent,
-                        elevation: 10,
-                      )),
-                ),
-
                 //CONTACTS
 
                 Container(
@@ -179,8 +167,7 @@ class _HOMEState extends State<HOME> {
                         elevation: 10,
                       )),
                 ),
-
-                //INSURANCE
+                //PREVIOUS MEDICAL CONDITIONS
 
                 Container(
                   padding: EdgeInsets.all(16),
@@ -190,7 +177,7 @@ class _HOMEState extends State<HOME> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => insurance()));
+                                builder: (context) => prev_med_conditions()));
                       },
                       child: Container(
                         height: 175,
@@ -199,7 +186,7 @@ class _HOMEState extends State<HOME> {
                             shape: BoxShape.rectangle,
                             image: DecorationImage(
                                 image:
-                                    AssetImage('assets/images/insurance.jpeg'),
+                                    AssetImage('assets/images/prev_med.jpeg'),
                                 fit: BoxFit.cover)),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -235,7 +222,7 @@ class _HOMEState extends State<HOME> {
                       )),
                 ),
 
-                //PREVIOUS MEDICAL CONDITIONS
+                //ACTIVE MEDICATION
 
                 Container(
                   padding: EdgeInsets.all(16),
@@ -245,7 +232,7 @@ class _HOMEState extends State<HOME> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => prev_med_conditions()));
+                                builder: (context) => MyAppHomePage()));
                       },
                       child: Container(
                         height: 175,
@@ -253,8 +240,38 @@ class _HOMEState extends State<HOME> {
                         decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
                             image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/prev_med_cond.jpeg'),
+                              image: AssetImage('assets/images/reminders.jpeg'),
+                              fit: BoxFit.fitWidth,
+                              alignment: Alignment.bottomCenter,
+                            )),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: BeveledRectangleBorder(),
+                        backgroundColor: Colors.transparent,
+                        elevation: 10,
+                      )),
+                ),
+
+                //INSURANCE
+
+                Container(
+                  padding: EdgeInsets.all(16),
+                  alignment: Alignment(0, 1),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => insurance()));
+                      },
+                      child: Container(
+                        height: 175,
+                        width: 350,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            image: DecorationImage(
+                                image:
+                                    AssetImage('assets/images/insurance.jpeg'),
                                 fit: BoxFit.cover)),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -311,9 +328,11 @@ class _HOMEState extends State<HOME> {
                         decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
                             image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/miscellaneous.jpeg'),
-                                fit: BoxFit.cover)),
+                              image:
+                                  AssetImage('assets/images/mecial_news.jpeg'),
+                              fit: BoxFit.fitWidth,
+                              alignment: Alignment.bottomLeft,
+                            )),
                       ),
                       style: ElevatedButton.styleFrom(
                         shape: BeveledRectangleBorder(),

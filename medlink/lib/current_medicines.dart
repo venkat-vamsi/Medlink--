@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medlink/homepage.dart';
 import 'package:medlink/menu.dart';
+import 'package:medlink/news/homenews.dart';
 import 'package:medlink/settings.dart';
 
 class currebt_medicines extends StatefulWidget {
@@ -22,7 +23,7 @@ class _currebt_medicinesState extends State<currebt_medicines> {
         title: GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HOME()));
+                context, MaterialPageRoute(builder: (context) => HomeN()));
           },
           child: Text('MEDLINK+'),
         ),
@@ -42,7 +43,6 @@ class _currebt_medicinesState extends State<currebt_medicines> {
           ),
         ],
         backgroundColor: Colors.transparent,
-        //backgroundColor: Colors.transparent,
         elevation: 0,
       ),
     );

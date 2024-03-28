@@ -1,14 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:medlink/anisplash.dart';
+import 'package:medlink/contacts.dart';
 import 'package:medlink/firebase_options.dart';
+import 'package:medlink/new_homepage.dart';
+import 'package:medlink/news/homenews.dart';
+//import 'package:medlink/firebase_options.dart';
 import 'package:medlink/sign_up_page.dart';
 import 'homepage.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:rive/rive.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: Home()));
+  tz.initializeTimeZones();
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: splashscreen()));
 }
 
 class MyApp extends StatelessWidget {
@@ -35,7 +45,9 @@ class Home extends StatelessWidget {
       if (userCredential != null) {
         User user = userCredential.user!;
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HOME()));
+            context, MaterialPageRoute(builder: (context) => HomeN()));
+        /*Navigator.push(
+            context, MaterialPageRoute(builder: (context) => New_Homepage()));*/
       } else {
         // Handle null userCredential (optional, based on your use case)
       }
@@ -126,12 +138,29 @@ class Home extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () => _loginWithEmailAndPassword(context),
                   child: Text('Login'),
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.black),
+                      minimumSize: MaterialStatePropertyAll(Size(200, 35))),
                 ),
-                SizedBox(height: 16.0),
                 TextButton(
                   onPressed: () => Navigator.push(context,
                       MaterialPageRoute(builder: (context) => SignUpPage())),
-                  child: Text('Sign Up'),
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'Don\'t have an account? ',
+                      style: TextStyle(fontSize: 10, color: Colors.black),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'SIGN UP',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

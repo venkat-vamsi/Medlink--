@@ -7,6 +7,7 @@ import 'package:medlink/homepage.dart';
 import 'package:medlink/insurances.dart';
 import 'package:medlink/main.dart';
 import 'package:medlink/miscellaneous.dart';
+import 'package:medlink/news/homenews.dart';
 import 'package:medlink/prescriptions.dart';
 import 'package:medlink/prev_med_conditions.dart';
 import 'package:medlink/scans.dart';
@@ -19,6 +20,7 @@ class NavigationDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
+        //width: 50,
         child: ListView(
           children: <Widget>[
             Container(
@@ -47,7 +49,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               tileColor: Colors.white,
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => HOME()));
+                    context, MaterialPageRoute(builder: (context) => HomeN()));
               },
             ),
             ListTile(
@@ -131,7 +133,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             ),
             ListTile(
               title: Text(
-                "MISCELLANEOUS",
+                "MEDICAL NEWS",
                 textAlign: TextAlign.center,
               ),
               tileColor: Colors.white,
